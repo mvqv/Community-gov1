@@ -1,0 +1,421 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  /* Custom breakpoint for small phones (375–480px zone) */
+  --breakpoint-xs: 480px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ink: var(--ink);
+  --color-orange: var(--orange);
+  --color-orange-deep: var(--orange-deep);
+  --color-cream: var(--cream);
+  --color-leaf: var(--leaf);
+  --color-leaf-deep: var(--leaf-deep);
+  --color-soft: var(--soft);
+
+  --font-display: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-body: "Inter", "Inter Fallback", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1rem;
+  --background: oklch(0.985 0.003 80);
+  --foreground: oklch(0.13 0.01 60);
+  --ink: oklch(0.1 0.005 60);
+  --soft: oklch(0.94 0.003 80);
+  --card: #ffffff;
+  --card-foreground: oklch(0.14 0.01 60);
+  --muted: oklch(0.96 0.005 80);
+  --muted-foreground: oklch(0.45 0.01 60);
+  --border: oklch(0.9 0.005 60);
+  --primary: oklch(0.1 0.005 60);
+  --primary-foreground: oklch(1 0 0);
+
+  --orange: #d65a18;
+  --orange-deep: #6e2806;
+  --cream: oklch(0.97 0.012 80);
+  --leaf: #2a6f3a;
+  --leaf-deep: #14391c;
+}
+
+@layer base {
+  * { border-color: var(--color-border); box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+  html { 
+    scroll-behavior: smooth; 
+    background: #f4f3ef;
+    scroll-padding-top: 80px;
+    /* Block horizontal scroll from any overflowing element.
+       overflow-x: hidden on html is the only reliable cross-browser way —
+       body alone is ignored because browsers transfer scroll to html. */
+    overflow-x: hidden;
+  }
+
+  /* Fallback font metrics tuned to Inter to minimise CLS during font swap.
+     These values match Inter's cap-height and x-height ratios. */
+  @font-face {
+    font-family: "Inter Fallback";
+    src: local("Arial");
+    size-adjust: 107%;
+    ascent-override: 90%;
+    descent-override: 22%;
+    line-gap-override: 0%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: "Inter", "Inter Fallback", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    /* Ensure vertical scroll stays on body so position:sticky on the header works */
+    overflow-y: auto;
+    font-feature-settings: "ss01", "cv11", "liga" 1;
+    letter-spacing: -0.015em;
+  }
+  ::selection { background: var(--ink); color: #fff; }
+
+  /* native momentum scrolling on mobile */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Desktop scrollbar */
+  @media (min-width: 768px) {
+    html::-webkit-scrollbar { width: 5px; }
+    html::-webkit-scrollbar-track { background: transparent; }
+    html::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.12);
+      border-radius: 99px;
+    }
+    html::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,0,0,0.22);
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    * { min-width: 0; }
+  }
+}
+
+/* ---------- HERO BLOB ---------- */
+@utility hero-orange {
+  background:
+    radial-gradient(120% 90% at 65% 30%, #e36a1f 0%, #b94614 35%, #6a2207 70%, #1a0703 100%);
+}
+
+@utility hero-mask-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+/* ---------- PILLS ---------- */
+@utility pill-white {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 18px 40px -22px rgba(0,0,0,0.22);
+}
+
+@utility pill-dark {
+  background: #0c0c0c;
+  color: #fff;
+  border-radius: 9999px;
+}
+
+@utility glass-dark {
+  background: rgba(20,12,8,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(22px) saturate(140%);
+  color: #fff;
+}
+
+/* ---------- CARDS ---------- */
+@utility card-soft {
+  background: #eeeae3;
+  border-radius: 28px;
+}
+@utility card-ink {
+  background: #0e0e0e;
+  color: #fff;
+  border-radius: 28px;
+}
+@utility card-leaf {
+  background:
+    linear-gradient(160deg, #2f7c40 0%, #1c4a25 100%);
+  color: #fff;
+  border-radius: 28px;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-left { animation: marquee-left 50s linear infinite; }
+.marquee-right { animation: marquee-right 50s linear infinite; }
+
+@keyframes float-y {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.float-y { animation: float-y 7s ease-in-out infinite; }
+
+/* ---------- SMOOTH SCROLL ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* ---------- PHONE MOCKUP AUTO-FIT ON MOBILE ---------- */
+@media (max-width: 640px) {
+  /* Phone fits inside card — JS ResizeObserver handles scale,
+     we just cap the width so it never exceeds the card. */
+  .mini-phone-wrap {
+    max-width: 100% !important;
+    /* height is controlled inline by JS — don't override */
+  }
+}
+
+/* ---------- MOBILE ADAPTATION ---------- */
+@media (max-width: 640px) {
+  .card-soft,
+  .card-ink,
+  .card-leaf {
+    border-radius: 20px;
+  }
+
+  /* Bento header: single col */
+  .bento-header-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* ---------- 375-480px TWEAKS (small phones) ---------- */
+@media (max-width: 480px) {
+
+  /* --- HEADER --- */
+  /* Shrink the CTA button so it doesn't overflow at 375 */
+  .header-cta {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* --- HERO TITLE --- */
+  /* 52px is way too big for 375px viewport */
+  .hero-h1 {
+    font-size: clamp(30px, 11vw, 46px) !important;
+    line-height: 1.06 !important;
+  }
+
+  /* --- HERO MOBILE PHONE --- */
+  /* Prevent phone from overflowing section */
+  .mobile-hero-phone-wrap {
+    max-width: 300px !important;
+  }
+
+  /* --- STATEMENT HEADING --- */
+  .statement-h2 {
+    font-size: clamp(19px, 6.5vw, 28px) !important;
+    max-width: 100% !important;
+  }
+
+  /* --- MOCKUP SHOWCASE (Statement section) --- */
+  /* Reduce overall height so marquee rows don't clip badly */
+  .mockup-showcase {
+    height: clamp(280px, 80vw, 380px) !important;
+  }
+
+  /* Scale showcase cards smaller on tiny screens */
+  .mockup-showcase .scale-75 {
+    transform: scale(0.58) !important;
+  }
+
+  /* Center phone in showcase — shrink it to fit */
+  .mockup-showcase .float-y {
+    transform: translate(-50%, -50%) scale(0.58) !important;
+  }
+
+  /* Halo: shrink to avoid extending outside */
+  .mockup-showcase .rounded-full {
+    /* only target the center halo div */
+  }
+
+  /* --- MINI PHONE in BENTO cards --- */
+  /* Reset the problematic width overrides */
+  .mini-phone-wrap {
+    max-width: 100% !important;
+  }
+
+  /* --- BENTO STACKS CARD (dark full-width card) --- */
+  /* Right phone column: shrink min-height */
+  .stacks-phone-col {
+    min-height: 220px !important;
+  }
+
+  /* --- SOCIAL PROOF cards --- */
+  .social-proof-card {
+    height: 280px !important;
+    width: 200px !important;
+  }
+
+  /* --- CLOSER / VIDEO TILES --- */
+  .closer-video-center {
+    width: min(240px, 64vw) !important;
+    height: min(360px, 96vw) !important;
+  }
+
+  /* --- REVIEWS MASONRY --- */
+  /* Already single column; just ensure text doesn't wrap awkwardly */
+  .reviews-masonry .review-card {
+    padding: 16px !important;
+  }
+
+  /* --- FAQ --- */
+  .faq-question {
+    font-size: 13px !important;
+  }
+}
+
+/* Extra narrow: 320px safety net */
+@media (max-width: 360px) {
+  .hero-h1 {
+    font-size: 28px !important;
+  }
+}
+
+/* ---------- INTERACTIVE DEMO PHONE SCALING ---------- */
+/* Scale the interactive phone to fit small screens without breaking layout */
+@media (max-width: 480px) {
+  /* Wrapper scales phone; let it take the full height it needs */
+  .interactive-demo-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .interactive-demo-phone > * {
+    /* Scale down the PhoneFrame inside */
+    transform: scale(0.88);
+    transform-origin: center center;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .interactive-demo-phone > * {
+    transform: scale(0.80);
+    transform-origin: center center;
+  }
+}
+
+/* ---------- SCROLL REVEAL ANIMATIONS ---------- */
+
+/* Base hidden state */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card pop — slight scale + rise */
+.reveal-card {
+  opacity: 0;
+  transform: translateY(32px) scale(0.97);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Phone mockup — rise + slight scale */
+.reveal-phone {
+  opacity: 0;
+  transform: translateY(48px) scale(0.93);
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-phone.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Slide from left */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-38px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left.is-visible { opacity: 1; transform: translateX(0); }
+
+/* Slide from right */
+.reveal-right {
+  opacity: 0;
+  transform: translateX(38px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-right.is-visible { opacity: 1; transform: translateX(0); }
+
+/* Stagger delays */
+.reveal-delay-1 { transition-delay: 0.09s; }
+.reveal-delay-2 { transition-delay: 0.18s; }
+.reveal-delay-3 { transition-delay: 0.27s; }
+.reveal-delay-4 { transition-delay: 0.36s; }
+.reveal-delay-5 { transition-delay: 0.45s; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .reveal-card,
+  .reveal-phone,
+  .reveal-left,
+  .reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
